@@ -42,14 +42,18 @@ exports.createAuthor = functions.https.onCall(async (data, context) => {
   });
 });
 
-// exports.createBook = functions.https.onCall(async (data, context) => {
-//   checkAuthentication(context, true);
-//   dataValidator(data, {
-//     bookName: 'string',
-//     authorId: 'string',
-//     bookCover: 'string',
-//     summary: 'string'
-//   });
+exports.createBook = functions.https.onCall(async (data, context) => {
+  checkAuthentication(context, true);
+
+  dataValidator(data, {
+    bookName: 'string',
+    authorId: 'string',
+    imageUrl: 'string',
+    description: 'string',
+    year: 'number'
+  });
+
+  // bookCover file manipulation. If uploading file
 //   const mimeType = data.bookCover.match(
 //     /data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/
 //   )[1];
@@ -64,25 +68,28 @@ exports.createAuthor = functions.https.onCall(async (data, context) => {
 //   )}`;
 //   const file = admin.storage().bucket().file(filename);
 //   await file.save(imageBuffer, { contentType: 'image/jpeg' });
+
+//// fileUrl gets passed instead of imageUrl
 //   const fileUrl = await file
 //     .getSignedUrl({ action: 'read', expires: '03-09-2491' })
 //     .then((urls) => urls[0]);
 
-//   admin
-//     .firestore()
-//     .collection('books')
-//     .add({
-//       title: data.bookName,
-//       imageUrl: fileUrl,
-//       author: admin.firestore().collection('authors').doc(data.authorId),
-//       summary: data.summary
-//     })
-//     .catch(() => {
-//       return {
-//         message: 'An error occurred when creating a book'
-//       };
-//     });
-// });
+  admin
+    .firestore()
+    .collection('books')
+    .add({
+      title: data.bookName,
+      imageUrl: data.imageUrl,
+      author: admin.firestore().collection('authors').doc(data.authorId),
+      description: data.description,
+      year: data.year
+    })
+    .catch(() => {
+      return {
+        message: 'An error occurred when creating a book'
+      };
+    });
+});
 
 // ATTEMPT AT PUBLIC PROFILE SERVER SIDE
 exports.createPublicProfile = functions.https.onCall(async (data, context) => {
