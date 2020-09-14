@@ -1,18 +1,16 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
+// for file type
 // const mimeTypes = require('mimetypes');
 
+// to enable this you need to pay. Comment to remove
 // const rp = require('request-promise');
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+// needed to start
 admin.initializeApp();
 
+// Tips:
 // TERMINAL DEPLOY AS: firebase deploy --only functions
 // TERMINAL check env variables: firebase functions:config:get
 
@@ -84,6 +82,10 @@ exports.createBook = functions.https.onCall(async (data, context) => {
       description: data.description,
       year: data.year
     })
+    // .then(() => {
+    //     // to enable this you need to pay. 
+    //     return rp.post('https://api.netlify.com/build_hooks/5f5f7b42b92f79089464273c')
+    // })
     .catch(() => {
       return {
         message: 'An error occurred when creating a book'
